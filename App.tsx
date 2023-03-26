@@ -1,40 +1,42 @@
 import { useState } from "react";
-import { FlatList, StyleSheet, View } from "react-native";
+import { FlatList, StyleSheet, View, Button, Modal } from "react-native";
 import GoalInput from "./components/GoalInput";
 import GoalItem from "./components/GoalItem";
 
 export default function App() {
   const [goalList, setGoalList] = useState<string[]>([]);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   const pressHandler = (enteredGoal: string) => {
-    const existingGoalIndex = goalList.indexOf(enteredGoal);
-    const isGoalAlreadyExist = existingGoalIndex !== -1 ? true : false;
+    const isGoalAlreadyExist = goalList.includes(enteredGoal);
+    if (isGoalAlreadyExist) return;
 
-    if (isGoalAlreadyExist) {
-      setGoalList((prevGoalList: string[]) => {
-        let newGoalList = [...prevGoalList];
-        newGoalList = newGoalList.filter((goal) => goal !== enteredGoal);
-        return newGoalList;
-      });
-    } else {
-      setGoalList((currentGoals: string[]) => [...currentGoals, enteredGoal]);
-    }
+    setGoalList((currentGoals: string[]) => [...currentGoals, enteredGoal]);
+  };
+
+  const deleteGoal = (goalToDelete: string) => {
+    setGoalList((currentGoals) =>
+      currentGoals.filter((goal) => goal !== goalToDelete)
+    );
   };
 
   return (
     <View style={styles.appContainer}>
-      <GoalInput onAddGoal={(goal: string) => pressHandler(goal)} />
+      <Button title="add goal" onPress={() => setIsModalVisible(true)} />
+      <Modal visible={isModalVisible} animationType="slide">
+        <GoalInput
+          onAddGoal={(goal: string) => pressHandler(goal)}
+          onCloseModal={() => setIsModalVisible(false)}
+        />
+      </Modal>
       <View style={styles.goalsListContainer}>
         <FlatList
           data={goalList}
-          keyExtractor={(goal, index) => goal}
-          renderItem={(goalItem) => <GoalItem goalItem={goalItem} />}
+          keyExtractor={(goal, _) => goal}
+          renderItem={(goalItem) => (
+            <GoalItem goalItem={goalItem} onDeleteGoal={deleteGoal} />
+          )}
         />
-        {/* {goalList.map((goal) => (
-          <View key={goal} style={styles.goalItem}>
-            <Text style={styles.goalText}>{goal}</Text>
-          </View>
-        ))} */}
       </View>
     </View>
   );
