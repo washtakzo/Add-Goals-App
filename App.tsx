@@ -1,5 +1,12 @@
 import { useState } from "react";
-import { FlatList, StyleSheet, View, Button, Modal } from "react-native";
+import {
+  FlatList,
+  StyleSheet,
+  View,
+  Button,
+  Modal,
+  StatusBar,
+} from "react-native";
 import GoalInput from "./components/GoalInput";
 import GoalItem from "./components/GoalItem";
 
@@ -21,24 +28,27 @@ export default function App() {
   };
 
   return (
-    <View style={styles.appContainer}>
-      <Button title="add goal" onPress={() => setIsModalVisible(true)} />
-      <Modal visible={isModalVisible} animationType="slide">
-        <GoalInput
-          onAddGoal={(goal: string) => pressHandler(goal)}
-          onCloseModal={() => setIsModalVisible(false)}
-        />
-      </Modal>
-      <View style={styles.goalsListContainer}>
-        <FlatList
-          data={goalList}
-          keyExtractor={(goal, _) => goal}
-          renderItem={(goalItem) => (
-            <GoalItem goalItem={goalItem} onDeleteGoal={deleteGoal} />
-          )}
-        />
+    <>
+      <StatusBar barStyle={"light-content"} />
+      <View style={styles.appContainer}>
+        <Button title="add goal" onPress={() => setIsModalVisible(true)} />
+        <Modal visible={isModalVisible} animationType="slide">
+          <GoalInput
+            onAddGoal={(goal: string) => pressHandler(goal)}
+            onCloseModal={() => setIsModalVisible(false)}
+          />
+        </Modal>
+        <View style={styles.goalsListContainer}>
+          <FlatList
+            data={goalList}
+            keyExtractor={(goal, _) => goal}
+            renderItem={(goalItem) => (
+              <GoalItem goalItem={goalItem} onDeleteGoal={deleteGoal} />
+            )}
+          />
+        </View>
       </View>
-    </View>
+    </>
   );
 }
 
@@ -48,6 +58,7 @@ const styles = StyleSheet.create({
     paddingTop: 50,
     paddingHorizontal: 16,
     alignItems: "center",
+    backgroundColor: "#1e085a",
   },
   goalsListContainer: {
     flex: 5,
