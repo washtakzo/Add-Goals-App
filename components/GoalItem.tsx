@@ -48,6 +48,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   pressedItem: {
-    backgroundColor: "#f23",
+    backgroundColor: "#4d588a",
   },
 });

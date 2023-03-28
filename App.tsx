@@ -25,6 +25,7 @@ export default function App() {
     setGoalList((currentGoals) =>
       currentGoals.filter((goal) => goal !== goalToDelete)
     );
+    console.log("Delete ! =)");
   };
 
   return (
